@@ -4,7 +4,29 @@ Hi! This project was created as my submission in my "DevOps for Automation and A
 
 This project is hosted on Render.com, check it out [here!](https://devops-ca2.glennwu.com/)
 
-## Instructions
+## Site Overview
+
+![image](https://github.com/glennwuwu/devops-vege-id/assets/22255356/9088286b-5843-4d64-b626-162859f069ce)
+*Image upload page*
+
+![image](https://github.com/glennwuwu/devops-vege-id/assets/22255356/529b6239-aca5-43ea-8302-2ef43bd3835d)
+*History page with pagination*
+
+![image](https://github.com/glennwuwu/devops-vege-id/assets/22255356/839fa901-123a-43c5-9b8b-8c90cda1b37a)
+*Prediction details page*
+
+## Tech Stack
+* Backend - Flask: A lightweight and flexible Python web framework.
+* Frontend - HTML, Tailwind CSS: HTML for structure, Tailwind CSS for styling.
+* Machine Learning - TensorFlow with TensorFlow Serving: Models are developed using TensorFlow and served using TensorFlow Serving for efficient deployment.
+* Database - PostgreSQL on Render.com: User and model-related information is stored in a PostgreSQL database hosted on Render.com.
+* Web Server - Hosted on Render.com: The web server is hosted on Render.com, providing a platform for deploying and scaling web applications.
+
+### Other Technologies Used
+* End-to-end Testing - Selenium: A script is ran within the deployment pipeline to ensure that the site is working as expected.
+* Unit Testing - PyTest
+
+## Usage Instructions
 
 ### Build Docker Image
 Build the Docker image for the project:
