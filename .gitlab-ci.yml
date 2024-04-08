@@ -1,0 +1,87 @@
+image: python:3.10
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  LOG_FILE: "ci_log.txt" # Set the log file name
+  BEFORE_SCRIPT: |
+
+# https://pip.pypa.io/en/stable/topics/caching/
+cache:
+  paths:
+    - .cache/pip
+
+stages:
+  - test
+  - deploy
+  - rpa
+
+install-requirements:
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y libgl1-mesa-glx # Install OpenGL library
+    - python --version ; pip --version
+    - pip install -r requirements-ci.txt
+  script:
+    - pip install -r requirements-ci.txt
+
+test:
+  stage: test
+  extends: install-requirements
+  script:
+    - FLASK_ENV=testing python -m pytest -m "db or prediction or user" -v --tb=line  --junitxml=test.xml
+  artifacts:
+    reports:
+      junit: test.xml
+
+deploy:
+  stage: deploy
+  script:
+    - curl https://api.render.com/deploy/srv-cn3t28f109ks73ervlg0?key=eTUteyxTXFc
+  only:
+    - main
+
+e2e:remote:chrome:
+  stage: rpa
+  extends: install-requirements
+  services:
+    - selenium/standalone-chrome
+  script:
+    - sleep 30
+    - FLASK_ENV=testing python -m pytest -m rpa --loc=CI --browser=chrome -v --tb=line --junitxml=chrome-rpa.xml
+
+  artifacts:
+    reports:
+      junit: rpa.xml
+  only:
+    - main
+# e2e:remote:firefox:
+#   stage: rpa
+#   extends: install-requirements
+#   services:
+#     - selenium/standalone-firefox
+#   script:
+#     - sleep 30
+#     - FLASK_ENV=testing python -m pytest -m rpa --loc=CI --browser=firefox -v --tb=line --junitxml=rpa.xml
+
+#   artifacts:
+#     reports:
+#       junit: rpa.xml
+#   only:
+#     - main
+
+e2e:remote:edge:
+  stage: rpa
+  extends: install-requirements
+  services:
+    - selenium/standalone-edge
+  script:
+    - sleep 30
+    - FLASK_ENV=testing python -m pytest -m rpa --loc=CI --browser=edge -v --tb=line --junitxml=rpa.xml
+
+  artifacts:
+    reports:
+      junit: rpa.xml
+  only:
+    - main

@@ -20,4 +20,3 @@ database.db
 node_modules
 instance
 config.cfg
-.gitlab-ci.yml
