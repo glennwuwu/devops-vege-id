@@ -1,0 +1,16 @@
+<!-- Your HTML template file (e.g., predictions.html) -->
+{% extends "page/layout.html" %} {% block content %}
+<div class="center-screen flex justify-center items-center flex-col">
+  <div
+    class="box bg-white dark:bg-zinc-700 dark:text-white p-8 rounded-3xl shadow-md font-bold text-center text-5xl"
+  >
+    404 - File Not Found
+    <img
+      id="question-mark-dog"
+      src="{{ url_for('static', filename='images/question-mark-dog.webp') }}"
+      alt="404"
+      class="rounded-2xl mt-2"
+    />
+  </div>
+</div>
+{% endblock %}

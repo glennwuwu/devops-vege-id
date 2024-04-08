@@ -1,0 +1,82 @@
+<header class="font-normal text-lg font-default">
+  <nav class="grid grid-cols-3 py-2">
+    <div class=""></div>
+    <div class="flex justify-center items-center">
+      <ul class="list-none flex items-center">
+        <li class="nav-item">
+          <a
+            href="/history"
+            class="nav-link text-black hover:underline {% if history %}active{% endif %}"
+            >History</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            href="/about"
+            class="nav-link text-black hover:underline {% if docs %}active{% endif %}"
+            >Docs</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="flex justify-center items-center">
+      <ul class="list-none flex items-center">
+        <li class="nav-button py-1">
+          <a
+            href="/upload"
+            class="nav-link text-black py-1 {% if upload %}active{% endif %}"
+          >
+            <div class="button py-2 px-3 bg-hl-1" id="navUploadButton">Upload Image</div></a
+          >
+        </li>
+        <li class="nav-link">
+          <div class="vl"></div>
+        </li>
+        <li
+          class="text-black {%if username == ''%}inactive ps-3{% endif %} ps-1"
+        >
+          {{username}}
+        </li>
+        <li class="nav-link">
+          {% if current_user.is_authenticated %}
+          <!-- Icon for logout -->
+          <a href="/user/sign_out" class="text-black login-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+              />
+            </svg>
+          </a>
+          {% else %}
+          <!-- Icon for login page -->
+          <a href="/user/sign_in" class="text-black login-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <g transform="rotate(180, 12, 12)">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+                />
+              </g></svg></a
+          >{% endif %}
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

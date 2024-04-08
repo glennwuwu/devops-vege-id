@@ -1,0 +1,59 @@
+<!-- Inherits from layout.html -->
+{% extends "page/layout.html" %}
+<!-- The block content replace the one encapsulated in layout.html -->
+{% block content %}
+<div
+  class="center-screen flex justify-center items-center flex-col text-black text-sm"
+>
+  <form
+    name="register_form"
+    action="{{url_for('register_page')}}"
+    method="post"
+    novalidate
+    class="basic-outer-container bg-white p-4 w-auto flex justify-center items-center flex-col"
+  >
+    <fieldset class="form-group">
+      <legend class="font-semibold text-lg">Sign Up</legend>
+      {{ form.hidden_tag() }}
+      <div class="font-regular grid grid-cols-1 gap-2 md:min-w-80">
+        <div>
+          <div>
+            {{ form.username.label(class_='font-semibold') }}<br />
+            {{ form.username(class_='my-1 bg-gray-200 border border-gray-300
+            text-gray-900 text-sm rounded-lg focus:ring-blue-500
+            focus:border-blue-500 block w-full p-2.5') }}{% for error in
+            form.username.errors %}
+            <span class="error-message">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <div>
+            {{ form.password.label(class_='font-semibold') }}<br />
+            {{ form.password(class_='my-1 bg-gray-200 border border-gray-300
+            text-gray-900 text-sm rounded-lg focus:ring-blue-500
+            focus:border-blue-500 block w-full p-2.5') }}{% for error in
+            form.password.errors %}
+            <span class="error-message">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="flex justify-center items-center">
+          <input
+            class="cursor-pointer py-2 px-3 button bg-hl-5 cursor-pointer"
+            id="submit"
+            name="submit"
+            type="submit"
+            value="Sign Up"
+          />
+        </div>
+
+        <p class="text-center">
+          Already a user? <br />
+          <a href="{{url_for('signin_page')}}" class="underline"> Sign in </a>
+        </p>
+      </div>
+    </fieldset>
+  </form>
+</div>
+{% endblock %}

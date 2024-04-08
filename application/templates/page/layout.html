@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <!-- main styling -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/main.css')}}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/upload.css')}}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/tailwind.css')}}"
+    />
+
+    <!-- fonts -->
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter"
+      integrity="sha512-BwVnfsbyM7ZgVeTQubHY/JXzpRCCuW0HRzsjlQ3melAYMCVdxfc2Cl0U0n1l3b4N/ptxz0llAqWHWYm48KayAw=="
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      integrity="sha512-gU63OoYmRZWht+jZIC3WD67iE+BtdY7Yk4HmsEXNsthfuojKEiXVPBiCN+kPuryqy5EcTD3VLJgNz4IYJxM5uQ=="
+      crossorigin="anonymous"
+    />
+
+    <!-- tailwind css -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
+    <!-- jquery -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- fa icons -->
+    <script
+      src="https://kit.fontawesome.com/8b9d3a3c7e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="bg">
+    <div class="text-center bg-white">
+      {% include "page/includes/nav.html" %}
+      <!-- <img src="{{ url_for('static',filename='images/logo.png')}}" /> -->
+    </div>
+
+    <main>
+      <div class="flex justify-center items-center font-default pt-10 flex-col">
+        {% with messages = get_flashed_messages(with_categories=true,
+        category_filter=["error", "success", "danger"])%} {% if messages %} {%
+        for category, message in messages %}
+        <div class="text-center py-4 lg:px-4">
+          <div
+            class="p-2 items-center alert-{{category}} leading-none lg:rounded-full flex lg:inline-flex"
+            role="alert"
+          >
+            <span
+              class="flex rounded-full alert-{{category}}-badge uppercase px-2 py-1 text-xs font-bold mr-3"
+              >{{category}}</span
+            >
+            <span class="font-semibold mr-2 text-left flex-auto"
+              >{{ message }}</span
+            >
+            <!-- <svg
+              class="fill-current opacity-75 h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"
+              />
+            </svg> -->
+          </div>
+        </div>
+        {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock
+        %}
+      </div>
+    </main>
+
+    {% include "page/includes/footer.html" %}
+  </body>
+  <!-- <script>
+    // https://tailwindcss.com/docs/dark-mode
+    $(document).ready(function () {
+      localStorage.theme = "light";
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    });
+  </script> -->
+</html>

@@ -1,0 +1,24 @@
+/* .upload-outer-container {
+  min-width: 400px;
+  min-height: 400px;
+} */
+
+.upload-inner-container {
+  border-radius: 35px;
+  border: 1px dashed #fff;
+  background: rgba(217, 217, 217, 0);
+}
+
+.upload-input {
+  border-radius: 10px;
+  /* border: 1px solid #fff;
+  background: rgba(217, 217, 217, 0);
+  color: #ffffff; */
+}
+
+#preview {
+  border-radius: 10px;
+  max-height: 400px;
+  max-width: 400px;
+  border: 1px #fff;
+}

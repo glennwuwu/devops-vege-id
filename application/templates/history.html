@@ -1,0 +1,184 @@
+<!-- Your HTML template file (e.g., predictions.html) -->
+{% extends "page/layout.html" %} {% block content %}
+<div class="min-w-96 w-1/2 text-black flex flex-col">
+  <div class="content-end">
+    <form
+      name="sort"
+      action="{{url_for('history_page', page=page_number, date_order=form.date_oldest_first.data, model=form.model.data, label=form.label.data)}}"
+      method="post"
+      novalidate
+    >
+      {{ form.csrf_token }}
+      <div
+        class="list-none flex w-auto font-medium text-lg float-left my-1 bg-hl-3 flex-row p-2 rounded-xl"
+      >
+        <div class="2xl:flex-row flex-col flex">
+          <div class="flex-row flex me-1">
+            <li class="px-1 font-semibold">Date</li>
+            <li class="px-1">
+              {{form.date_oldest_first(class_='bg-hl-hl-3 rounded')}}
+            </li>
+          </div>
+          <div class="flex-row flex me-1">
+            <li class="px-1 font-semibold">Model</li>
+            <li class="px-1">{{form.model(class_='bg-hl-hl-3 rounded')}}</li>
+          </div>
+        </div>
+        <div>
+          {{form.sort(class_='flex flex-row form-control px-1 bg-3 rounded
+          cursor-pointer')}}
+        </div>
+      </div>
+
+      <div
+        class="list-none flex w-auto font-medium text-lg xl:float-right float-left my-1 bg-neutral-300 p-2 rounded-xl align-middle"
+      >
+        <label for="search" class="sr-only">Search</label>
+        <div class="flex w-auto font-medium text-lgrounded-xl">
+          <div class="flex-row flex items-center me-2">
+            <!-- <span class="px-1 font-semibold me-1">Label</span> -->
+            {{form.label(class_='px-1 bg-neutral-200 rounded focus:outline-none
+            focus:ring focus:border-blue-300', placeholder_="E.g. Papaya",
+            list_="searchSuggestions")}}
+            <datalist id="searchSuggestions">
+              {% for suggestion in suggestions %}
+              <option value="{{suggestion}}"></option>
+              {%endfor%}
+            </datalist>
+          </div>
+        </div>
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  {% if predictions %}
+  <table class="table-auto">
+    <thead>
+      <tr>
+        <th class="px-2 py-2">Image</th>
+        <th class="px-2 py-2">Prediction</th>
+        <th class="px-2 py-2">Model</th>
+        <th class="px-2 py-2">Date & Time</th>
+        <th class="px-2 py-2">ID</th>
+        <th class="px-2 py-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prediction in predictions %}
+      <form
+        method="post"
+        action="{{ url_for('delete_prediction', image_id=prediction.id)}}"
+        class="delete-form flex flex-row"
+      >
+        <tr class="justify-center items-center border-4 bg-white">
+          <td class="flex justify-center items-center pt-1">
+            <img
+              loading="lazy"
+              src="{{ url_for('display_processed_image', image_id=prediction.id) }}"
+              alt="Processed Image"
+              class="w-16 rounded-xl items-center"
+            />
+          </td>
+          <td class="text-center">
+            <span id="prediction_label">{{ prediction.label }}</span>
+          </td>
+          <td class="text-center">
+            <div class="flex flex-col justify-center align-middle items-center">
+              <div class="bg-hl-2 py-1 px-2 rounded-xl" id="prediction_model">
+                {{prediction.prediction_model}}
+              </div>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="flex flex-col">
+              <span id="prediction_date">
+                {{ prediction.predicted_on.strftime('%Y-%m-%d') }}</span
+              ><span id="prediction_time">
+                {{ prediction.predicted_on.strftime('%H:%M:%S') }}</span
+              >
+            </div>
+          </td>
+          <td class="text-center">
+            <span id="prediction_id">{{ prediction.id }}</span>
+          </td>
+          <td class="text-center">
+            <div
+              class="flex flex-col justify-center align-middle items-center gap-1"
+            >
+              <button class="" type="submit">
+                <div class="bg-red-500 text-white py-1 px-2 rounded-xl">
+                  Delete
+                </div>
+              </button>
+              <a
+                href="{{ url_for('display_prediction', image_id=prediction.id) }}"
+              >
+                <div class="bg-blue-500 py-1 px-2 rounded-xl text-white">
+                  Details
+                </div>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </form>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="pt-2 text-xl">No predictions available.</p>
+  {% endif %}
+  <div
+    class="list-none flex w-auto font-medium text-lg float-right my-1 bg-hl-5 p-2 rounded-xl mt-4"
+  >
+    <li class="px-1">Page {{page_number}}</li>
+    {% if pagination.has_prev > 0 %}
+    <li>
+      <a
+        href="{{url_for('history_page', page=prev_page, date_order=form.date_oldest_first.data, model=form.model.data, label=form.label.data)}}"
+        id="prev_page"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6 mt-1"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </a>
+    </li>
+    {%endif%} {%if pagination.has_next > 0%}
+    <li>
+      <a
+        href="{{url_for('history_page', page=next_page, date_order=form.date_oldest_first.data, model=form.model.data, label=form.label.data)}}"
+        id="next_page"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6 mt-1"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </a>
+    </li>
+    {%endif%}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+<!-- Inherits from layout.html -->
+{% extends "page/layout.html" %} {% block content %}
+<div class="center-screen flex justify-center items-center flex-col">
+  <div class="">
+    <!-- <div class="upload-inner-container"> -->
+    <div
+      class="basic-outer-container upload-outer-container bg-white p-4 flex justify-center items-center flex-row"
+    >
+      <img
+        src="{{ url_for('display_processed_image', image_id=image_id) }}"
+        alt="Processed Image"
+        class="w-96 rounded-3xl"
+      />
+
+      <div
+        class="ms-4 flex justify-center items-center flex-row h-full text-black"
+      >
+        <div
+          class="pointer-events-auto w-[15rem] rounded-3xl text-black p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-1 ring-slate-700/10 h-full"
+        >
+          <div class="text-base">{{label}}</div>
+          <div class="relative flex py-1 items-center">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="flex-shrink mx-2 text-gray-400">Model</span>
+            <div class="flex-grow border-t border-gray-400"></div>
+          </div>
+          <button>
+            <div class="bg-hl-2 py-1 px-2 rounded-xl">
+              {{image.prediction_model}}
+            </div>
+          </button>
+          <div class="relative flex py-1 items-center">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="flex-shrink mx-2 text-gray-400"
+              >Prediction Confidence</span
+            >
+            <div class="flex-grow border-t border-gray-400"></div>
+          </div>
+          {% for conf in confidence%} {{conf.prediction_class}}:
+          {{conf.prediction_confidence}}% <br />{%endfor%}
+          <div class="relative flex py-1 items-center">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="flex-shrink mx-2 text-gray-400">Prediction Time</span>
+            <div class="flex-grow border-t border-gray-400"></div>
+          </div>
+          <div class="italic">
+            {{image.predicted_on.strftime('%Y-%m-%d %H:%M') }}
+          </div>
+        </div>
+
+        <div class="gradient-button">
+          <button
+            type="submit"
+            class="text-black py-2 px-3"
+            id="submitButton"
+            style="display: none"
+            onclick="loadingSpinner(this)"
+          >
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </div>
+</div>
+
+<script></script>
+{% endblock %}

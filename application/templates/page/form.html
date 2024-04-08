@@ -1,0 +1,21 @@
+{% extends "page/layout.html" %} {% block content %}
+
+<div class="flex justify-center items-center h-max pt-3">
+  <div class="box bg-white p-5 rounded shadow-md w-screen lg:w-3/4 xl:w-1/2">
+    {% block form %} {% endblock %}
+  </div>
+</div>
+
+{% with predictions = get_flashed_messages(category_filter=["prediction"]) %} {%
+if predictions %}
+<div class="flex justify-center items-center h-max pt-3 text-lg">
+  <div class="box font-bold bg-white px-5 py-2 rounded shadow-md w-screen lg:w-3/4 xl:w-1/2">
+    Prediction Result
+    <ul class="font-medium">
+      {%- for msg in predictions %}
+      <li>{{ msg }}</li>
+      {% endfor -%}
+    </ul>
+  </div>
+</div>
+{% endif %} {% endwith %} {% endblock %}

@@ -1,0 +1,178 @@
+<!-- Inherits from layout.html -->
+{% extends "page/layout.html" %} {% block content %}
+<div class="flex justify-center items-center flex-col center-screen">
+  <div class="">
+    {% if form.errors %} {{ form.errors }} {% endif %}
+    <!-- <div class="upload-inner-container"> -->
+    <form
+      method="POST"
+      action="{{url_for('uploaded_image')}}"
+      novalidate
+      enctype="multipart/form-data"
+      class="basic-outer-container upload-outer-container bg-white p-4 flex justify-center items-center flex-col"
+    >
+      {{ form.hidden_tag() }}
+      <span class="text-black text-xl font-semibold pb-4"
+        >Vegetable Prediction</span
+      >
+      <div class="flex flex-row">
+        <div class="flex flex-col items-center">
+          <img
+            id="imagePlaceholder"
+            src="{{ url_for('static', filename='images/pngegg.png') }}"
+            alt="Bonk Choy"
+            width="500"
+            height="600"
+          />
+          <div id="imagePreview" style="display: none">
+            <img id="preview" alt="Image Preview" />
+          </div>
+
+          {{ form.photo(class_='form-control upload-input my-4', accept_=".jpg,
+          .png, .jpeg", id_="fileUpload", onchange_="previewImage(this)") }}
+          <p>
+            {% for error in form.photo.errors %}
+            <span class="error-message">{{ error }}</span>
+            {% endfor %}
+          </p>
+
+          <p class="text-black font-medium text-base m-0" id="userInstruction">
+            Drag and drop or upload an image here
+          </p>
+        </div>
+        <div class="flex flex-col ms-3 justify-center items-center">
+          <div id="modelChoice" style="display: none">
+            <div
+              class="pointer-events-auto w-[21rem] rounded-lg text-black p-4 text-[0.8125rem] leading-5 shadow-xl shadow-black/5 ring-1 ring-slate-700/10 mb-4"
+            >
+              <div>
+                <p>
+                  Select a model{{ form.model(class_='ms-2 text-slate-900
+                  rounded-sm', onchange_='modelInformation(this)') }}{% for
+                  error in form.model.errors %}
+                  <span class="error-message">{{ error }}</span>
+                  {% endfor %}
+                </p>
+              </div>
+              <div class="flex justify-between">
+                <div class="font-medium text-black" id="modelSize"></div>
+              </div>
+              <div class="mt-1 text-slate-700 text-black" id="modelDesc"></div>
+            </div>
+          </div>
+          <div
+            id="loadingSpinner"
+            style="display: none"
+            class="py-2 px-3 text-black button bg-hl-2 items-center"
+          >
+            <svg
+              aria-hidden="true"
+              role="status"
+              class="inline w-4 h-4 me-2 mb-1 text-black animate-spin"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="#E5E7EB"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span> Uploading...</span>
+          </div>
+
+          <div class="button bg-hl-2">
+            <button
+              type="submit"
+              class="text-black py-2 px-3"
+              id="submitButton"
+              style="display: none"
+              onclick="loadingSpinner(this)"
+            >
+              Upload
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- </div> -->
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    modelInformation();
+  });
+
+  function modelInformation() {
+    let information = { 31: "92% Accuracy", 128: "96% Accuracy" };
+    model_type = $("#model").find(":selected").val();
+    $("#modelSize").text(
+      "Images will be rescaled to (" +
+        model_type +
+        ", " +
+        model_type +
+        ") and converted to grayscale."
+    );
+    $("#modelDesc").text(information[model_type]);
+    console.log(information[model_type]);
+  }
+
+  function previewImage(input) {
+    var preview = document.getElementById("preview");
+    var imagePreview = document.getElementById("imagePreview");
+    var submitButton = document.getElementById("submitButton");
+    var userInstruction = document.getElementById("userInstruction");
+    var imagePlaceholder = document.getElementById("imagePlaceholder");
+    var modelChoice = document.getElementById("modelChoice");
+
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        imagePlaceholder.style.display = "none";
+        imagePreview.style.display = "block";
+        submitButton.style.display = "block";
+        userInstruction.style.display = "none";
+        modelChoice.style.display = "block";
+      };
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      clearImage();
+    }
+  }
+  function clearImage() {
+    var preview = document.getElementById("preview");
+    var imagePreview = document.getElementById("imagePreview");
+    var submitButton = document.getElementById("submitButton");
+    var userInstruction = document.getElementById("userInstruction");
+    var fileInput = document.querySelector('input[name="photo"]');
+    var imagePlaceholder = document.getElementById("imagePlaceholder");
+    var modelChoice = document.getElementById("modelChoice");
+
+    preview.src = "";
+
+    imagePlaceholder.style.display = "block";
+    imagePreview.style.display = "none";
+    submitButton.style.display = "none";
+    modelChoice.style.display = "none";
+    userInstruction.style.display = "block";
+    fileInput.value = ""; // Clear the file input value to allow selecting the same file again
+  }
+
+  function loadingSpinner() {
+    var submitButton = document.getElementById("submitButton");
+    var imagePreview = document.getElementById("imagePreview");
+    var fileUpload = document.getElementById("fileUpload");
+    var spinner = document.getElementById("loadingSpinner");
+    submitButton.style.display = "none";
+    // imagePreview.style.display = "none";
+    // fileUpload.style.display = "none";
+    spinner.style.display = "block";
+  }
+</script>
+{% endblock %}
