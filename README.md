@@ -1,4 +1,8 @@
-# Vegetable Prediction
+# Vegetable Prediction Web App
+
+Hi! This project was created as my submission in my "DevOps for Automation and AI" module at Singapore Polytechnic. The main focus of this project was on showcasing DevOps techniques through GitLab CI/CD pipelines, containerisation with Docker, and more along with MLOps with Tensorflow Serving deployed to the web. 
+
+This project is hosted on Render.com, check it out [here!](https://devops-ca2.glennwu.com/)
 
 ## Instructions
 
